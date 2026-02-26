@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Study – Zentaro.nl x Ecomtrada</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #0f1019;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-card-hover: rgba(255, 255, 255, 0.06);
+            --accent-blue: #4da8da;
+            --accent-blue-light: #7ec8e3;
+            --accent-blue-glow: rgba(77, 168, 218, 0.15);
+            --accent-cyan: #00d4ff;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --text-muted: rgba(255, 255, 255, 0.35);
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --gradient-main: linear-gradient(135deg, #0a0a0f 0%, #0d1117 50%, #0a0f1a 100%);
+            --gradient-accent: linear-gradient(135deg, #4da8da, #00d4ff);
+            --gradient-card: linear-gradient(135deg, rgba(77, 168, 218, 0.08), rgba(0, 212, 255, 0.03));
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* ── Navigation ── */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 40px;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .nav-brand {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            padding: 8px 20px;
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+            background: var(--accent-blue-glow);
+        }
+
+        .nav-btn.primary {
+            background: var(--gradient-accent);
+            border: none;
+            color: var(--bg-primary);
+            font-weight: 600;
+        }
+
+        .nav-btn.primary:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .slide-indicator {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* ── Slide Container ── */
+        .presentation {
+            padding-top: 64px;
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gradient-main);
+            z-index: 0;
+        }
+
+        .slide-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* ── Ambient Glow Effects ── */
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glow-orb.blue {
+            background: var(--accent-blue);
+            width: 400px;
+            height: 400px;
+        }
+
+        .glow-orb.cyan {
+            background: var(--accent-cyan);
+            width: 300px;
+            height: 300px;
+        }
+
+        /* ── Typography ── */
+        .slide-number {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .slide-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+
+        .slide-title .accent {
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-subtitle {
+            font-size: 1.15rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 600px;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent-blue);
+            margin-bottom: 32px;
+            padding: 6px 14px;
+            border: 1px solid rgba(77, 168, 218, 0.2);
+            border-radius: 20px;
+            background: rgba(77, 168, 218, 0.05);
+        }
+
+        .section-label::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+        }
+
+        /* ── Cards & Containers ── */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(77, 168, 218, 0.15);
+        }
+
+        .card-glow {
+            background: var(--gradient-card);
+            border: 1px solid rgba(77, 168, 218, 0.12);
+        }
+
+        /* ── Bullet Points ── */
+        .bullet-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .bullet-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .bullet-list li .bullet-icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: rgba(77, 168, 218, 0.1);
+            border: 1px solid rgba(77, 168, 218, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+        }
+
+        .bullet-list li .bullet-icon svg {
+            width: 12px;
+            height: 12px;
+            color: var(--accent-blue);
+        }
+
+        /* ── KPI Blocks ── */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .kpi-block {
+            background: var(--gradient-card);
+            border: 1px solid rgba(77, 168, 218, 0.1);
+            border-radius: 16px;
+            padding: 36px 28px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-block::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+        }
+
+        .kpi-value {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .kpi-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ── Two Column Layout ── */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .col-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .col-title .num {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: rgba(77, 168, 218, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* ── Chart Container ── */
+        .chart-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 40px;
+            position: relative;
+        }
+
+        .chart-svg {
+            width: 100%;
+            height: auto;
+        }
+
+        /* ── Animations ── */
+        .animate-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .animate-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .animate-in.delay-1 { transition-delay: 0.1s; }
+        .animate-in.delay-2 { transition-delay: 0.2s; }
+        .animate-in.delay-3 { transition-delay: 0.3s; }
+        .animate-in.delay-4 { transition-delay: 0.4s; }
+        .animate-in.delay-5 { transition-delay: 0.5s; }
+        .animate-in.delay-6 { transition-delay: 0.6s; }
+
+        .animate-scale {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .animate-scale.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Counter animation for numbers */
+        .count-up {
+            display: inline-block;
+        }
+
+        /* ── Highlight Box ── */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(77, 168, 218, 0.12), rgba(0, 212, 255, 0.06));
+            border: 1px solid rgba(77, 168, 218, 0.2);
+            border-radius: 12px;
+            padding: 20px 28px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-blue-light);
+            text-align: center;
+        }
+
+        /* ── Tag / Badge ── */
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tag.hero { background: rgba(76, 175, 80, 0.15); color: #81c784; border: 1px solid rgba(76, 175, 80, 0.25); }
+        .tag.sidekick { background: rgba(77, 168, 218, 0.15); color: var(--accent-blue-light); border: 1px solid rgba(77, 168, 218, 0.25); }
+        .tag.zombie { background: rgba(255, 183, 77, 0.15); color: #ffcc80; border: 1px solid rgba(255, 183, 77, 0.25); }
+        .tag.villain { background: rgba(244, 67, 54, 0.15); color: #ef9a9a; border: 1px solid rgba(244, 67, 54, 0.25); }
+
+        /* ── Divider ── */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border-subtle), transparent);
+            margin: 32px 0;
+        }
+
+        /* ── Cover Specific ── */
+        .cover-slide {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .cover-slide .slide-title {
+            font-size: clamp(3.5rem, 7vw, 6rem);
+            margin-bottom: 16px;
+        }
+
+        .cover-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin-top: 48px;
+        }
+
+        .cover-meta span {
+            color: var(--accent-blue);
+        }
+
+        /* ── Conclusion Slide ── */
+        .conclusion-text {
+            font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+            font-weight: 700;
+            line-height: 1.3;
+            max-width: 800px;
+            letter-spacing: -0.01em;
+        }
+
+        .conclusion-sub {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-top: 24px;
+            padding: 16px 24px;
+            border-left: 2px solid var(--accent-blue);
+        }
+
+        /* ── Visual: Fundering diagram ── */
+        .fundering-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .fundering-layer {
+            padding: 16px 32px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            width: 100%;
+            position: relative;
+        }
+
+        .fundering-layer.top {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(77, 168, 218, 0.1));
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 12px 12px 0 0;
+            color: var(--accent-cyan);
+            font-size: 1.1rem;
+        }
+
+        .fundering-layer.mid {
+            background: linear-gradient(135deg, rgba(77, 168, 218, 0.1), rgba(77, 168, 218, 0.05));
+            border-left: 1px solid rgba(77, 168, 218, 0.15);
+            border-right: 1px solid rgba(77, 168, 218, 0.15);
+            color: var(--accent-blue-light);
+        }
+
+        .fundering-layer.base {
+            background: linear-gradient(135deg, rgba(77, 168, 218, 0.2), rgba(0, 212, 255, 0.1));
+            border: 1px solid rgba(77, 168, 218, 0.25);
+            border-radius: 0 0 12px 12px;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 700;
+            padding: 20px 32px;
+        }
+
+        .fundering-arrow {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            padding: 4px 0;
+        }
+
+        /* ── Competition Visual ── */
+        .competition-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .comp-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .comp-label {
+            width: 100px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .comp-bar-track {
+            flex: 1;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .comp-bar-fill {
+            height: 100%;
+            border-radius: 8px;
+            transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 0;
+        }
+
+        .comp-bar-fill.visible {
+            /* width set via inline style */
+        }
+
+        .comp-bar-fill.zentaro {
+            background: var(--gradient-accent);
+        }
+
+        .comp-bar-fill.other {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .comp-bar-value {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            width: 40px;
+            flex-shrink: 0;
+        }
+
+        /* ── Flat Chart (SVG-based) ── */
+        .flat-chart {
+            position: relative;
+            width: 100%;
+            padding-top: 16px;
+        }
+
+        .flat-chart svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .chart-label {
+            font-size: 0.7rem;
+            fill: var(--text-muted);
+        }
+
+        .chart-line {
+            fill: none;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .chart-area {
+            opacity: 0.15;
+        }
+
+        .chart-dot {
+            fill: var(--accent-cyan);
+            stroke: var(--bg-primary);
+            stroke-width: 3;
+        }
+
+        .chart-annotation {
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* ── Print / PDF Styles ── */
+        @media print {
+            .nav-bar { display: none !important; }
+            .slide {
+                min-height: 100vh;
+                page-break-after: always;
+                page-break-inside: avoid;
+            }
+            .animate-in, .animate-scale {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            .comp-bar-fill {
+                transition: none !important;
+            }
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .slide { padding: 60px 28px; }
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+            .two-col { grid-template-columns: 1fr; gap: 32px; }
+        }
+
+        @media (max-width: 600px) {
+            .slide { padding: 40px 20px; }
+            .kpi-grid { grid-template-columns: 1fr; }
+            .nav-bar { padding: 12px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<nav class="nav-bar">
+    <div class="nav-brand">Ecomtrada &middot; Case Study</div>
+    <div class="nav-controls">
+        <span class="slide-indicator" id="slideIndicator">01 / 08</span>
+        <button class="nav-btn" onclick="window.print()">Export PDF</button>
+    </div>
+</nav>
+
+<div class="presentation">
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 1 – COVER
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide cover-slide" id="slide-1">
+    <div class="glow-orb blue" style="top: -100px; right: -100px; opacity: 0.2;"></div>
+    <div class="glow-orb cyan" style="bottom: -80px; left: -60px; opacity: 0.15;"></div>
+    <div class="slide-inner" style="text-align: center;">
+        <div class="animate-in">
+            <div class="section-label">Case Study 2025–2026</div>
+        </div>
+        <h1 class="slide-title animate-in delay-1">
+            Van <span class="accent">€2K</span> naar <span class="accent">€70K</span><br>per week
+        </h1>
+        <p class="slide-subtitle animate-in delay-2" style="margin: 0 auto 20px; text-align: center;">
+            Producthero Labelizer + ProductAI Case Study
+        </p>
+        <div class="divider animate-in delay-3" style="max-width: 120px; margin: 32px auto;"></div>
+        <p class="cover-meta animate-in delay-4">
+            <span>Zentaro.nl</span> &times; <span>Ecomtrada</span>
+        </p>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 2 – DE UITDAGING
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-2">
+    <div class="glow-orb blue" style="top: 20%; left: -150px; opacity: 0.12;"></div>
+    <div class="slide-inner">
+        <div class="animate-in">
+            <div class="section-label">Slide 02</div>
+        </div>
+        <h2 class="slide-title animate-in delay-1">De <span class="accent">situatie</span></h2>
+
+        <div class="two-col" style="margin-top: 48px;">
+            <div>
+                <ul class="bullet-list">
+                    <li class="animate-in delay-2">
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></span>
+                        <span>Fashion retailer in <strong style="color: #fff;">extreem competitieve</strong> markt</span>
+                    </li>
+                    <li class="animate-in delay-2">
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></span>
+                        <span>Concurrentie van Zalando, Shein en grote spelers</span>
+                    </li>
+                    <li class="animate-in delay-3">
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></span>
+                        <span>Beperkte schaalbaarheid binnen target ROAS</span>
+                    </li>
+                    <li class="animate-in delay-3">
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></span>
+                        <span>Onvoldoende verrijkte productdata in Google Merchant Center</span>
+                    </li>
+                    <li class="animate-in delay-4">
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></span>
+                        <span>Groei zat tegen een <strong style="color: #fff;">plafond</strong></span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="animate-scale delay-3">
+                <div class="chart-container">
+                    <div style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 24px;">
+                        Wekelijkse Omzet – Vóór Optimalisatie
+                    </div>
+                    <svg viewBox="0 0 460 200" class="chart-svg">
+                        <!-- Grid lines -->
+                        <line x1="40" y1="30" x2="440" y2="30" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                        <line x1="40" y1="70" x2="440" y2="70" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                        <line x1="40" y1="110" x2="440" y2="110" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                        <line x1="40" y1="150" x2="440" y2="150" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+
+                        <!-- Y-axis labels -->
+                        <text x="35" y="34" text-anchor="end" class="chart-label" style="font-size:10px;">€8K</text>
+                        <text x="35" y="74" text-anchor="end" class="chart-label" style="font-size:10px;">€6K</text>
+                        <text x="35" y="114" text-anchor="end" class="chart-label" style="font-size:10px;">€4K</text>
+                        <text x="35" y="154" text-anchor="end" class="chart-label" style="font-size:10px;">€2K</text>
+
+                        <!-- Flat line around €2K -->
+                        <defs>
+                            <linearGradient id="flatGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#4da8da" stop-opacity="0.3"/>
+                                <stop offset="100%" stop-color="#4da8da" stop-opacity="0"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M60,148 L110,150 L160,145 L210,152 L260,148 L310,150 L360,146 L420,150"
+                              class="chart-line" stroke="#4da8da" stroke-dasharray="4,4"/>
+                        <path d="M60,148 L110,150 L160,145 L210,152 L260,148 L310,150 L360,146 L420,150 L420,180 L60,180 Z"
+                              fill="url(#flatGrad)" class="chart-area"/>
+
+                        <!-- Plateau annotation -->
+                        <line x1="60" y1="140" x2="420" y2="140" stroke="rgba(244,67,54,0.4)" stroke-width="1" stroke-dasharray="6,4"/>
+                        <text x="240" y="135" text-anchor="middle" fill="#ef9a9a" style="font-size:10px; font-weight:600;">PLAFOND</text>
+
+                        <!-- X-axis -->
+                        <text x="60" y="195" text-anchor="start" class="chart-label" style="font-size:9px;">jan '25</text>
+                        <text x="240" y="195" text-anchor="middle" class="chart-label" style="font-size:9px;">mrt '25</text>
+                        <text x="420" y="195" text-anchor="end" class="chart-label" style="font-size:9px;">jun '25</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 3 – DE STRATEGIE
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-3">
+    <div class="glow-orb cyan" style="top: 40%; right: -120px; opacity: 0.1;"></div>
+    <div class="slide-inner">
+        <div class="animate-in">
+            <div class="section-label">Slide 03</div>
+        </div>
+        <h2 class="slide-title animate-in delay-1">Onze <span class="accent">aanpak</span></h2>
+
+        <div class="two-col" style="margin-top: 48px;">
+            <!-- Column 1: Labelizer -->
+            <div class="card animate-in delay-2">
+                <div class="col-title">
+                    <span class="num">1</span>
+                    Producthero Labelizer
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">
+                    Product segmentatie op basis van performance
+                </p>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
+                    <span class="tag hero">Hero</span>
+                    <span class="tag sidekick">Sidekick</span>
+                    <span class="tag zombie">Zombie</span>
+                    <span class="tag villain">Villain</span>
+                </div>
+                <ul class="bullet-list" style="gap: 12px;">
+                    <li>
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+                        <span style="font-size: 0.85rem;">Budget gestuurd op product performance</span>
+                    </li>
+                    <li>
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+                        <span style="font-size: 0.85rem;">HSZ structuur in PMax campagnes</span>
+                    </li>
+                    <li>
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+                        <span style="font-size: 0.85rem;">Winnaars opschalen, verliezers elimineren</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Column 2: ProductAI -->
+            <div class="card animate-in delay-3">
+                <div class="col-title">
+                    <span class="num">2</span>
+                    ProductAI – Juli 2025
+                </div>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 20px;">
+                    AI-gedreven feed optimalisatie
+                </p>
+                <ul class="bullet-list" style="gap: 12px;">
+                    <li>
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/></svg></span>
+                        <span style="font-size: 0.85rem;">Titels verrijkt met relevante zoektermen</span>
+                    </li>
+                    <li>
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/></svg></span>
+                        <span style="font-size: 0.85rem;">Attributen verbeterd en gestandaardiseerd</span>
+                    </li>
+                    <li>
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/></svg></span>
+                        <span style="font-size: 0.85rem;">Structuur in GMC opgeschoond</span>
+                    </li>
+                    <li>
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/></svg></span>
+                        <span style="font-size: 0.85rem;">Missing data in bulk opgelost</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 4 – GAMECHANGER MOMENT
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-4">
+    <div class="glow-orb blue" style="bottom: 10%; left: 10%; opacity: 0.15;"></div>
+    <div class="glow-orb cyan" style="top: 15%; right: 5%; opacity: 0.08;"></div>
+    <div class="slide-inner">
+        <div class="animate-in">
+            <div class="section-label">Slide 04</div>
+        </div>
+        <h2 class="slide-title animate-in delay-1">Juli 2025 – Het <span class="accent">kantelpunt</span></h2>
+        <p class="slide-subtitle animate-in delay-2" style="margin-bottom: 48px;">
+            Na activatie van ProductAI zagen we direct meer volume en hogere relevantie binnen Shopping en PMax.
+        </p>
+
+        <div class="chart-container animate-scale delay-3">
+            <div style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 24px;">
+                Wekelijkse Omzet – Juli 2025 t/m Februari 2026
+            </div>
+            <svg viewBox="0 0 700 280" class="chart-svg">
+                <defs>
+                    <linearGradient id="growthGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.25"/>
+                        <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
+                    </linearGradient>
+                    <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#4da8da"/>
+                        <stop offset="100%" stop-color="#00d4ff"/>
+                    </linearGradient>
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="4" result="blur"/>
+                        <feMerge>
+                            <feMergeNode in="blur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+
+                <!-- Grid lines -->
+                <line x1="60" y1="40" x2="670" y2="40" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <line x1="60" y1="80" x2="670" y2="80" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <line x1="60" y1="120" x2="670" y2="120" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <line x1="60" y1="160" x2="670" y2="160" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <line x1="60" y1="200" x2="670" y2="200" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                <line x1="60" y1="240" x2="670" y2="240" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+
+                <!-- Y-axis labels -->
+                <text x="50" y="44" text-anchor="end" class="chart-label" style="font-size:10px;">€70K</text>
+                <text x="50" y="84" text-anchor="end" class="chart-label" style="font-size:10px;">€60K</text>
+                <text x="50" y="124" text-anchor="end" class="chart-label" style="font-size:10px;">€45K</text>
+                <text x="50" y="164" text-anchor="end" class="chart-label" style="font-size:10px;">€30K</text>
+                <text x="50" y="204" text-anchor="end" class="chart-label" style="font-size:10px;">€15K</text>
+                <text x="50" y="244" text-anchor="end" class="chart-label" style="font-size:10px;">€2K</text>
+
+                <!-- Growth line area -->
+                <path d="M80,238 C120,236 160,232 200,225 C240,215 280,200 320,180 C360,155 400,125 440,100 C480,80 520,65 560,52 C600,45 640,42 660,40 L660,250 L80,250 Z"
+                      fill="url(#growthGrad)"/>
+
+                <!-- Growth line -->
+                <path d="M80,238 C120,236 160,232 200,225 C240,215 280,200 320,180 C360,155 400,125 440,100 C480,80 520,65 560,52 C600,45 640,42 660,40"
+                      class="chart-line" stroke="url(#lineGrad)" filter="url(#glow)"/>
+
+                <!-- Data points -->
+                <circle cx="80" cy="238" r="4" class="chart-dot"/>
+                <circle cx="200" cy="225" r="4" class="chart-dot"/>
+                <circle cx="320" cy="180" r="4" class="chart-dot"/>
+                <circle cx="440" cy="100" r="4" class="chart-dot"/>
+                <circle cx="560" cy="52" r="4" class="chart-dot"/>
+                <circle cx="660" cy="40" r="5" class="chart-dot" fill="#00d4ff"/>
+
+                <!-- ProductAI activation marker -->
+                <line x1="80" y1="30" x2="80" y2="250" stroke="rgba(0,212,255,0.3)" stroke-width="1" stroke-dasharray="4,4"/>
+                <text x="85" y="28" fill="#00d4ff" style="font-size:9px; font-weight:600;">ProductAI ↓</text>
+
+                <!-- End value -->
+                <text x="660" y="32" text-anchor="middle" fill="#00d4ff" style="font-size:11px; font-weight:700;">€70K</text>
+
+                <!-- X-axis labels -->
+                <text x="80" y="268" text-anchor="start" class="chart-label" style="font-size:9px;">jul '25</text>
+                <text x="200" y="268" text-anchor="middle" class="chart-label" style="font-size:9px;">sep '25</text>
+                <text x="320" y="268" text-anchor="middle" class="chart-label" style="font-size:9px;">nov '25</text>
+                <text x="440" y="268" text-anchor="middle" class="chart-label" style="font-size:9px;">jan '26</text>
+                <text x="660" y="268" text-anchor="end" class="chart-label" style="font-size:9px;">feb '26</text>
+            </svg>
+        </div>
+
+        <div class="highlight-box animate-in delay-4" style="margin-top: 32px; max-width: 560px;">
+            Exponentiële groei na feed optimalisatie
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 5 – RESULTATEN
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-5">
+    <div class="glow-orb blue" style="top: 30%; left: 50%; transform: translateX(-50%); opacity: 0.12;"></div>
+    <div class="slide-inner" style="text-align: center;">
+        <div class="animate-in">
+            <div class="section-label" style="display: inline-flex;">Slide 05</div>
+        </div>
+        <h2 class="slide-title animate-in delay-1">De <span class="accent">cijfers</span></h2>
+
+        <div class="kpi-grid" style="margin-top: 56px;">
+            <div class="kpi-block animate-scale delay-2">
+                <div class="kpi-value"><span class="count-up" data-target="1110000" data-prefix="€" data-suffix="" data-format="currency">€0</span></div>
+                <div class="kpi-label">Conversiewaarde</div>
+            </div>
+            <div class="kpi-block animate-scale delay-3">
+                <div class="kpi-value"><span class="count-up" data-target="439000" data-prefix="€" data-suffix="" data-format="currency">€0</span></div>
+                <div class="kpi-label">Kosten</div>
+            </div>
+            <div class="kpi-block animate-scale delay-4">
+                <div class="kpi-value"><span class="count-up" data-target="253" data-prefix="" data-suffix="%" data-format="number">0%</span></div>
+                <div class="kpi-label">ROAS</div>
+            </div>
+            <div class="kpi-block animate-scale delay-5">
+                <div class="kpi-value"><span class="count-up" data-target="23300" data-prefix="" data-suffix="" data-format="thousands">0</span></div>
+                <div class="kpi-label">Conversies</div>
+            </div>
+        </div>
+
+        <div class="divider animate-in delay-5" style="max-width: 200px; margin: 48px auto;"></div>
+
+        <div class="highlight-box animate-in delay-6" style="max-width: 480px; margin: 0 auto; font-size: 1.3rem;">
+            Van <strong>€2K</strong>/week → <strong style="color: #00d4ff;">€70K</strong>/week
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 6 – WAAROM HET WERKT
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-6">
+    <div class="glow-orb cyan" style="bottom: 20%; right: -80px; opacity: 0.1;"></div>
+    <div class="slide-inner">
+        <div class="animate-in">
+            <div class="section-label">Slide 06</div>
+        </div>
+        <h2 class="slide-title animate-in delay-1">Waarom deze combinatie <span class="accent">werkt</span></h2>
+
+        <div class="two-col" style="margin-top: 48px; align-items: center;">
+            <div>
+                <ul class="bullet-list">
+                    <li class="animate-in delay-2">
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+                        <span>Feed optimalisatie <strong style="color: #fff;">verhoogt relevantie</strong></span>
+                    </li>
+                    <li class="animate-in delay-2">
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+                        <span>Labelizer geeft <strong style="color: #fff;">budgetcontrole</strong></span>
+                    </li>
+                    <li class="animate-in delay-3">
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+                        <span>Meer zichtbaarheid op <strong style="color: #fff;">generieke termen</strong></span>
+                    </li>
+                    <li class="animate-in delay-3">
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+                        <span>Sneller <strong style="color: #fff;">winnaars identificeren</strong></span>
+                    </li>
+                    <li class="animate-in delay-4">
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
+                        <span>Opschalen <strong style="color: #fff;">zonder ROAS instorting</strong></span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="animate-scale delay-3" style="display: flex; justify-content: center;">
+                <div class="fundering-visual">
+                    <div class="fundering-layer top">PERFORMANCE</div>
+                    <div class="fundering-arrow">&#9660;</div>
+                    <div class="fundering-layer mid">Segmentatie &amp; Controle</div>
+                    <div class="fundering-arrow">&#9660;</div>
+                    <div class="fundering-layer mid">Feed Optimalisatie</div>
+                    <div class="fundering-arrow">&#9660;</div>
+                    <div class="fundering-layer base">DATA</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 7 – COMPETITIEF VOORDEEL
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-7">
+    <div class="glow-orb blue" style="top: 10%; left: -100px; opacity: 0.12;"></div>
+    <div class="slide-inner">
+        <div class="animate-in">
+            <div class="section-label">Slide 07</div>
+        </div>
+        <h2 class="slide-title animate-in delay-1">Markt<span class="accent">dominantie</span></h2>
+
+        <div class="two-col" style="margin-top: 48px; align-items: start;">
+            <div>
+                <ul class="bullet-list">
+                    <li class="animate-in delay-2">
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+                        <span>Structurele zichtbaarheid op <strong style="color: #fff;">merktermen</strong></span>
+                    </li>
+                    <li class="animate-in delay-2">
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+                        <span>Sterke impression share in <strong style="color: #fff;">kernsegmenten</strong></span>
+                    </li>
+                    <li class="animate-in delay-3">
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+                        <span><strong style="color: #fff;">85%</strong> omzet via mobiel</span>
+                    </li>
+                    <li class="animate-in delay-3">
+                        <span class="bullet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+                        <span>PMax opgesplitst volgens <strong style="color: #fff;">HSZ structuur</strong></span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="animate-scale delay-3">
+                <div class="card">
+                    <div style="font-size: 0.7rem; font-weight: 600; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 24px;">
+                        Impression Share – Kernsegmenten
+                    </div>
+                    <div class="competition-bars">
+                        <div class="comp-bar-row">
+                            <span class="comp-label" style="color: var(--accent-cyan); font-weight: 700;">Zentaro</span>
+                            <div class="comp-bar-track">
+                                <div class="comp-bar-fill zentaro" data-width="88%" style="width: 0%;"></div>
+                            </div>
+                            <span class="comp-bar-value" style="color: var(--accent-cyan);">88%</span>
+                        </div>
+                        <div class="comp-bar-row">
+                            <span class="comp-label">Concurrent A</span>
+                            <div class="comp-bar-track">
+                                <div class="comp-bar-fill other" data-width="52%" style="width: 0%;"></div>
+                            </div>
+                            <span class="comp-bar-value">52%</span>
+                        </div>
+                        <div class="comp-bar-row">
+                            <span class="comp-label">Concurrent B</span>
+                            <div class="comp-bar-track">
+                                <div class="comp-bar-fill other" data-width="38%" style="width: 0%;"></div>
+                            </div>
+                            <span class="comp-bar-value">38%</span>
+                        </div>
+                        <div class="comp-bar-row">
+                            <span class="comp-label">Concurrent C</span>
+                            <div class="comp-bar-track">
+                                <div class="comp-bar-fill other" data-width="24%" style="width: 0%;"></div>
+                            </div>
+                            <span class="comp-bar-value">24%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     SLIDE 8 – CONCLUSIE
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="slide" id="slide-8" style="text-align: center;">
+    <div class="glow-orb blue" style="top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.15; width: 500px; height: 500px;"></div>
+    <div class="slide-inner" style="display: flex; flex-direction: column; align-items: center;">
+        <div class="animate-in">
+            <div class="section-label" style="display: inline-flex;">Slide 08</div>
+        </div>
+        <h2 class="slide-title animate-in delay-1" style="margin-bottom: 48px;">
+            Structuur verslaat <span class="accent">gokken</span>
+        </h2>
+
+        <p class="conclusion-text animate-in delay-2">
+            Wij optimaliseren niet alleen campagnes.<br>
+            <span class="accent">Wij optimaliseren de fundering.</span>
+        </p>
+
+        <div class="conclusion-sub animate-in delay-3" style="max-width: 600px; text-align: left; margin-top: 40px;">
+            Productdata + segmentatie + controle = <strong style="color: #fff;">schaalbare winstgevende groei</strong>
+        </div>
+
+        <div class="divider animate-in delay-4" style="max-width: 120px; margin: 56px auto 32px;"></div>
+
+        <p class="animate-in delay-5" style="font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.5px;">
+            <span style="color: var(--accent-blue);">Zentaro.nl</span> &times; <span style="color: var(--accent-blue);">Ecomtrada</span>
+        </p>
+        <p class="animate-in delay-5" style="font-size: 0.7rem; color: var(--text-muted); margin-top: 8px; letter-spacing: 0.5px;">
+            Agency Day Submission – Producthero
+        </p>
+    </div>
+</section>
+
+</div><!-- /presentation -->
+
+<!-- ── JavaScript ── -->
+<script>
+(function() {
+    'use strict';
+
+    // ── Intersection Observer for scroll animations ──
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -60px 0px',
+        threshold: 0.1
+    };
+
+    const animateOnScroll = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+
+                // Trigger count-up for KPI numbers
+                if (entry.target.querySelector('.count-up')) {
+                    entry.target.querySelectorAll('.count-up').forEach(el => {
+                        animateCounter(el);
+                    });
+                }
+
+                // Trigger competition bars
+                if (entry.target.querySelector('.comp-bar-fill')) {
+                    entry.target.querySelectorAll('.comp-bar-fill').forEach(bar => {
+                        setTimeout(() => {
+                            bar.style.width = bar.dataset.width;
+                        }, 300);
+                    });
+                }
+            }
+        });
+    }, observerOptions);
+
+    // Observe all animated elements
+    document.querySelectorAll('.animate-in, .animate-scale').forEach(el => {
+        animateOnScroll.observe(el);
+    });
+
+    // ── Counter Animation ──
+    function animateCounter(el) {
+        if (el.dataset.animated) return;
+        el.dataset.animated = 'true';
+
+        const target = parseInt(el.dataset.target);
+        const prefix = el.dataset.prefix || '';
+        const suffix = el.dataset.suffix || '';
+        const format = el.dataset.format || 'number';
+        const duration = 2000;
+        const start = performance.now();
+
+        function formatValue(val) {
+            if (format === 'currency') {
+                if (val >= 1000000) {
+                    return prefix + (val / 1000000).toFixed(2).replace('.', ',') + 'M';
+                } else if (val >= 1000) {
+                    return prefix + Math.round(val / 1000) + 'K';
+                }
+                return prefix + val;
+            } else if (format === 'thousands') {
+                if (val >= 1000) {
+                    return (val / 1000).toFixed(1).replace('.', ',') + 'K';
+                }
+                return val + suffix;
+            }
+            return prefix + val + suffix;
+        }
+
+        function easeOutExpo(t) {
+            return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+        }
+
+        function update(now) {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const easedProgress = easeOutExpo(progress);
+            const currentValue = Math.round(easedProgress * target);
+
+            el.textContent = formatValue(currentValue);
+
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            } else {
+                // Ensure final value is exact
+                if (format === 'currency' && target === 1110000) {
+                    el.textContent = '€1,11M';
+                } else if (format === 'currency' && target === 439000) {
+                    el.textContent = '€439K';
+                } else if (format === 'thousands' && target === 23300) {
+                    el.textContent = '23,3K';
+                } else {
+                    el.textContent = formatValue(target);
+                }
+            }
+        }
+
+        requestAnimationFrame(update);
+    }
+
+    // ── Slide Indicator ──
+    const slides = document.querySelectorAll('.slide');
+    const indicator = document.getElementById('slideIndicator');
+
+    function updateIndicator() {
+        const scrollTop = window.scrollY + window.innerHeight / 2;
+        let currentSlide = 1;
+
+        slides.forEach((slide, index) => {
+            if (scrollTop >= slide.offsetTop) {
+                currentSlide = index + 1;
+            }
+        });
+
+        indicator.textContent = String(currentSlide).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+    }
+
+    window.addEventListener('scroll', updateIndicator, { passive: true });
+    updateIndicator();
+
+    // ── Keyboard navigation ──
+    let currentSlideIndex = 0;
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+            e.preventDefault();
+            currentSlideIndex = Math.min(currentSlideIndex + 1, slides.length - 1);
+            slides[currentSlideIndex].scrollIntoView({ behavior: 'smooth' });
+        } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+            e.preventDefault();
+            currentSlideIndex = Math.max(currentSlideIndex - 1, 0);
+            slides[currentSlideIndex].scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+
+})();
+</script>
+
+</body>
+</html>
